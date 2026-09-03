@@ -1,0 +1,13 @@
+{
+  "shortcuts": {
+    "bindings": {
+      "goToWorkspace": null,
+      "commandPalette": null,
+      "findInDirectory": null,
+      "toggleSidebar": null,
+      "splitRight": null,
+      "splitDown": null,
+      "renameWorkspace": null
+    }
+  }
+}
