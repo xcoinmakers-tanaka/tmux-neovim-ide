@@ -77,6 +77,14 @@ map("v", ">", ">gv", { desc = "Indent right" })
 map("n", "<D-/>", "gcc", { remap = true, desc = "Toggle comment" })
 map("v", "<D-/>", "gc", { remap = true, desc = "Toggle comment" })
 
+-- Save file (Cmd+S)
+map({ "n", "v" }, "<D-s>", "<cmd>w<cr>", { desc = "Save file" })
+map("i", "<D-s>", "<esc><cmd>w<cr>gi", { desc = "Save file" })
+
+-- Undo (Cmd+Z)
+map("n", "<D-z>", "u", { desc = "Undo" })
+map("i", "<D-z>", "<c-o>u", { desc = "Undo" })
+
 -- Clear search highlight
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
 

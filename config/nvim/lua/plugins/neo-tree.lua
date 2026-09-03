@@ -11,6 +11,7 @@ return {
     keys = {
       -- VSCode macOS: Cmd+Shift+E = Toggle explorer, Cmd+B = Toggle sidebar
       { "<D-S-e>", "<cmd>Neotree toggle<cr>", desc = "Toggle Explorer" },
+      { "<D-A-e>", "<cmd>Neotree focus<cr>", desc = "Focus Explorer (Alt+Cmd+E)" },
       { "<D-b>", "<cmd>Neotree toggle<cr>", desc = "Toggle Sidebar" },
       { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Explorer" },
       { "<leader>o", "<cmd>Neotree focus<cr>", desc = "Focus Explorer" },

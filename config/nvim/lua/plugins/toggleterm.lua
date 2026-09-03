@@ -66,6 +66,23 @@ return {
         mode = { "n", "t" },
         desc = "Floating terminal",
       },
+      -- Cmd+Shift+C = new terminal at the current file's directory
+      {
+        "<D-S-c>",
+        function()
+          Snacks.terminal.toggle(nil, {
+            cwd = vim.fn.expand("%:p:h"),
+            win = {
+              position = "float",
+              border = "rounded",
+              width = 0.85,
+              height = 0.8,
+            },
+          })
+        end,
+        mode = { "n", "t" },
+        desc = "New terminal at file's directory",
+      },
     },
     config = function(_, opts)
       require("snacks").setup(opts)

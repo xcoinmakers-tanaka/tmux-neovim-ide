@@ -21,6 +21,8 @@ return {
         map("n", "<leader>hr", gs.reset_hunk, "Reset hunk")
         map("n", "<leader>hp", gs.preview_hunk, "Preview hunk")
         map("n", "<leader>hb", function() gs.blame_line({ full = true }) end, "Blame line")
+        -- VSCode macOS (GitLens): Shift+Alt+Cmd+G = diffWithPrevious (working file vs last commit)
+        map("n", "<D-A-S-g>", function() gs.diffthis() end, "Diff with previous commit (Cmd)")
       end,
     },
   },
@@ -30,6 +32,8 @@ return {
     keys = {
       { "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Diff view" },
       { "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File history" },
+      -- VSCode macOS (GitLens): Shift+Alt+Cmd+R = diffWithRevision (pick a revision from file history)
+      { "<D-A-S-r>", "<cmd>DiffviewFileHistory %<cr>", desc = "Diff with revision (Cmd)" },
     },
   },
 }

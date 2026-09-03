@@ -13,3 +13,13 @@ keybind = super+slash=text:\x1b[47;9~
 keybind = super+grave_accent=text:\x1b[96;9~
 keybind = super+j=text:\x1b[106;9~
 keybind = super+shift+j=text:\x1b[74;10~
+keybind = super+d=text:\x1b[100;9~
+keybind = super+m=text:\x1b[109;9~
+keybind = super+shift+c=text:\x1b[67;10~
+keybind = shift+super+r=text:\x1b[82;10~
+keybind = alt+super+e=text:\x1b[101;11~
+keybind = shift+super+d=text:\x1b[68;10~
+keybind = shift+alt+super+r=text:\x1b[82;12~
+keybind = shift+alt+super+g=text:\x1b[71;12~
+keybind = super+s=text:\x1b[115;9~
+keybind = super+z=text:\x1b[122;9~
