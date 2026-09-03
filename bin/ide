@@ -34,6 +34,13 @@ fi
 session_name="${session_name//./_}"
 session_name="${session_name//:/_}"
 
+# Make the session unique per terminal (tty), so opening the same project in
+# multiple windows/workspaces (e.g. separate cmux workspaces) does not share
+# a single tmux session and mirror keystrokes across each other.
+term_id=$(ps -o tty= -p $$ 2>/dev/null | tr -d ' /')
+if [[ -n "$term_id" && "$term_id" != "?" ]]; then
+    session_name="${session_name}_${term_id}"
+fi
 
 if tmux has-session -t="$session_name" 2>/dev/null; then
     # Attach to existing session
