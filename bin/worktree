@@ -1,0 +1,101 @@
+#!/bin/bash
+# ==========================================================
+# git worktree helper for tmux-neovim-ide
+# ==========================================================
+# Creates a git worktree under a flat ~/projects/.worktrees/
+# directory (sibling of the main repo), then opens it with `ide`
+# so it gets its own independent tmux session automatically.
+#
+# Layout:
+#   ~/projects/
+#   ├── my-app/              ← main repo
+#   └── .worktrees/          ← all worktrees, flat
+#       ├── my-app_feature-x/
+#       └── my-app_feature-y/
+#
+# Usage:
+#   cd ~/projects/my-app
+#   worktree feature/xxx        # creates + checks out a new branch
+#   worktree feature/xxx --base develop   # branch off a specific base
+#   worktree --remove feature/xxx         # remove a worktree when done
+
+set -euo pipefail
+
+usage() {
+  cat <<EOF
+Usage:
+  worktree <branch-name> [--base <base-branch>]   # create + open a worktree
+  worktree --remove <branch-name>                 # remove a worktree
+  worktree --list                                  # list worktrees for this repo
+EOF
+}
+
+if [[ $# -eq 0 ]]; then
+  usage
+  exit 1
+fi
+
+repo_root=$(git rev-parse --show-toplevel 2>/dev/null) || {
+  echo "Not inside a git repository"
+  exit 1
+}
+repo_name=$(basename "$repo_root")
+projects_root=$(dirname "$repo_root")
+worktrees_root="$projects_root/.worktrees"
+
+mkdir -p "$worktrees_root"
+
+slugify() {
+  # feature/xxx -> feature_xxx
+  echo "${1//\//_}"
+}
+
+if [[ "$1" == "--list" ]]; then
+  git -C "$repo_root" worktree list
+  exit 0
+fi
+
+if [[ "$1" == "--remove" ]]; then
+  branch="${2:-}"
+  if [[ -z "$branch" ]]; then
+    usage
+    exit 1
+  fi
+  slug=$(slugify "$branch")
+  worktree_dir="$worktrees_root/${repo_name}_${slug}"
+  session_name="${repo_name}_${slug}"
+  # Kill any tmux sessions for this worktree (there may be several, one per terminal)
+  tmux list-sessions -F '#{session_name}' 2>/dev/null | grep -E "^${session_name}(_.+)?$" | while read -r s; do
+    tmux kill-session -t "$s" 2>/dev/null || true
+  done
+  git -C "$repo_root" worktree remove "$worktree_dir" --force
+  echo "Removed worktree: $worktree_dir"
+  exit 0
+fi
+
+branch="$1"
+shift
+base=""
+if [[ "${1:-}" == "--base" ]]; then
+  base="${2:-}"
+  shift 2
+fi
+
+slug=$(slugify "$branch")
+worktree_dir="$worktrees_root/${repo_name}_${slug}"
+
+if [[ -d "$worktree_dir" ]]; then
+  echo "Worktree already exists, opening: $worktree_dir"
+else
+  if git -C "$repo_root" show-ref --verify --quiet "refs/heads/$branch"; then
+    # Branch already exists locally, just attach a worktree to it
+    git -C "$repo_root" worktree add "$worktree_dir" "$branch"
+  elif [[ -n "$base" ]]; then
+    git -C "$repo_root" worktree add -b "$branch" "$worktree_dir" "$base"
+  else
+    git -C "$repo_root" worktree add -b "$branch" "$worktree_dir"
+  fi
+fi
+
+# Hand off to the ide command so it gets its own tty-scoped tmux session
+exec ide "$worktree_dir"

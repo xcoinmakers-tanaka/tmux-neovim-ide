@@ -17,10 +17,10 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-info()  { echo -e "${BLUE}[INFO]${NC} $1"; }
-ok()    { echo -e "${GREEN}[OK]${NC} $1"; }
-warn()  { echo -e "${YELLOW}[WARN]${NC} $1"; }
-error() { echo -e "${RED}[ERROR]${NC} $1"; }
+info()  { echo -e "${BLUE}[INFO]${NC}$1"; }
+ok()    { echo -e "${GREEN}[OK]${NC}$1"; }
+warn()  { echo -e "${YELLOW}[WARN]${NC}$1"; }
+error() { echo -e "${RED}[ERROR]${NC}$1"; }
 
 # -- Usage --
 usage() {
@@ -43,7 +43,7 @@ for arg in "$@"; do
   case $arg in
     --config-only) CONFIG_ONLY=true ;;
     --help) usage; exit 0 ;;
-    *) error "Unknown option: $arg"; usage; exit 1 ;;
+    *) error "Unknown option:$arg"; usage; exit 1 ;;
   esac
 done
 
@@ -59,7 +59,7 @@ fi
 install_tools() {
   info "Installing tools..."
 
-  if ! command -v brew &>/dev/null; then
+  if !command -v brew &>/dev/null; then
     error "Homebrew is not installed"
     echo "  → Install from https://brew.sh"
     exit 1
@@ -70,7 +70,7 @@ install_tools() {
     if command -v "$tool" &>/dev/null; then
       ok "$tool already installed"
     else
-      info "Installing $tool..."
+      info "Installing$tool..."
       brew install "$tool"
       ok "$tool installed"
     fi
@@ -105,7 +105,7 @@ backup_and_link() {
   # Back up existing file/directory
   if [[ -e "$dest" ]] || [[ -L "$dest" ]]; then
     mkdir -p "$BACKUP_DIR"
-    warn "Backing up $label to $BACKUP_DIR/"
+    warn "Backing up$label to$BACKUP_DIR/"
     mv "$dest" "$BACKUP_DIR/"
   fi
 
@@ -113,7 +113,7 @@ backup_and_link() {
   mkdir -p "$(dirname "$dest")"
 
   ln -sf "$src" "$dest"
-  ok "$label → $dest"
+  ok "$label →$dest"
 }
 
 link_configs() {
@@ -134,6 +134,10 @@ link_configs() {
   mkdir -p "$HOME/.local/bin"
   backup_and_link "$REPO_DIR/bin/ide" "$HOME/.local/bin/ide" "bin/ide"
   chmod +x "$REPO_DIR/bin/ide"
+
+  # worktree script (git worktree helper, see bin/worktree)
+  backup_and_link "$REPO_DIR/bin/worktree" "$HOME/.local/bin/worktree" "bin/worktree"
+  chmod +x "$REPO_DIR/bin/worktree"
 
   echo ""
 }
@@ -161,7 +165,7 @@ setup_path() {
     echo '' >> "$shell_rc"
     echo '# tmux-neovim-ide' >> "$shell_rc"
     echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$shell_rc"
-    ok "PATH added to $shell_rc"
+    ok "PATH added to$shell_rc"
   fi
 }
 
@@ -198,7 +202,7 @@ setup_path
 check_font
 
 echo "=================================================="
-echo -e "  ${GREEN}Setup complete!${NC}"
+echo -e "${GREEN}Setup complete!${NC}"
 echo "=================================================="
 echo ""
 echo "  Next steps:"
