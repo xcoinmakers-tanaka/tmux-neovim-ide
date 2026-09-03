@@ -9,5 +9,20 @@
       "splitDown": null,
       "renameWorkspace": null
     }
+  },
+  "actions": {
+    "new-in-projects": {
+      "type": "workspace",
+      "title": "New Workspace (Projects)",
+      "workspace": {
+        "name": "Projects",
+        "cwd": "~/Projects"
+      }
+    }
+  },
+  "ui": {
+    "newWorkspace": {
+      "action": "new-in-projects"
+    }
   }
 }
