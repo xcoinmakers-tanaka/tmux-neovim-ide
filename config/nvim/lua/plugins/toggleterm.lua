@@ -25,9 +25,9 @@ return {
       },
     },
     keys = {
-      -- Cmd+` = bottom terminal (for Claude Code implementation)
+      -- Alt(Option)+J = bottom terminal (for Claude Code implementation)
       {
-        "<D-`>",
+        "<A-j>",
         function()
           Snacks.terminal.toggle(nil, {
             env = { SNACKS_TERM = "bottom" },

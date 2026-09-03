@@ -92,6 +92,10 @@ return {
           map("n", "<leader>D", vim.lsp.buf.type_definition, "Type definition")
           -- VSCode macOS: Shift+Cmd+R = Show call hierarchy (incoming calls)
           map("n", "<D-S-r>", vim.lsp.buf.incoming_calls, "Call hierarchy (incoming)")
+          -- VSCode macOS (adapted): Alt(Option)+Click = Go to definition
+          map("n", "<A-LeftMouse>", vim.lsp.buf.definition, "Go to definition (Alt+Click)")
+          -- VSCode macOS (adapted): Alt(Option)+Shift+Click = Go to references (jump to callers)
+          map("n", "<A-S-LeftMouse>", vim.lsp.buf.references, "Go to references (Alt+Shift+Click)")
           -- VSCode: F8 / Shift+F8 = Next/prev diagnostic
           map("n", "<F8>", vim.diagnostic.goto_next, "Next diagnostic")
           map("n", "<S-F8>", vim.diagnostic.goto_prev, "Previous diagnostic")
