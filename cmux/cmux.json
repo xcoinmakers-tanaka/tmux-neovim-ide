@@ -9,8 +9,5 @@
       "splitDown": null,
       "renameWorkspace": null
     }
-  },
-  "app": {
-    "workspaceInheritWorkingDirectory": false
   }
 }
