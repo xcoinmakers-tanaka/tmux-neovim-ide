@@ -26,28 +26,31 @@ return {
     },
     keys = {
       -- Alt(Option)+J = bottom terminal (for Claude Code implementation)
+      -- Snacks.terminal.toggle()は「開いていれば閉じる」だけでフォーカスは動かさない。
+      -- Snacks.terminal.focus()は「フォーカスしていなければフォーカス、既にフォーカス中なら隠す」ため
+      -- 他ペインにフォーカスがある状態から確実にこのターミナルへ移動できる。
       {
         "<A-j>",
         function()
-          Snacks.terminal.toggle(nil, {
+          Snacks.terminal.focus(nil, {
             env = { SNACKS_TERM = "bottom" },
             win = { position = "bottom", height = 0.4 },
           })
         end,
         mode = { "n", "t" },
-        desc = "Bottom terminal",
+        desc = "Bottom terminal (focus/hide)",
       },
       -- Cmd+J = right terminal (for Claude Code consultation/review)
       {
         "<D-j>",
         function()
-          Snacks.terminal.toggle(nil, {
+          Snacks.terminal.focus(nil, {
             env = { SNACKS_TERM = "right" },
             win = { position = "right", width = 0.35 },
           })
         end,
         mode = { "n", "t" },
-        desc = "Right terminal",
+        desc = "Right terminal (focus/hide)",
       },
       -- Cmd+Shift+J = floating terminal (general terminal / git operations)
       {
