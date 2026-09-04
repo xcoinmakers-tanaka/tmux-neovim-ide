@@ -101,6 +101,18 @@ return {
         end,
       })
 
+      -- mouse=aのとき、ターミナルウィンドウ内をクリックするとNeovimの仕様で
+      -- ウィンドウ/バッファは変わらず Terminal-Jobモード→Normalモードに自動遷移する。
+      -- BufEnter/WinEnterは発火しないので、ModeChanged(t:n)で直接拦捉して戻す。
+      vim.api.nvim_create_autocmd("ModeChanged", {
+        pattern = "t:n",
+        callback = function()
+          if vim.bo.buftype == "terminal" then
+            vim.cmd("startinsert")
+          end
+        end,
+      })
+
 
       -- :q/:wq on last file buffer → :bd instead of quit (triggers BufDelete → dashboard)
       local function is_last_file_buf()
