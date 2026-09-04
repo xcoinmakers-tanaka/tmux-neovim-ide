@@ -88,6 +88,19 @@ return {
       require("snacks").setup(opts)
       vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
 
+      -- Cursor CLI等をターミナルバッファで使う際、ウィンドウ切替やマウス操作で
+      -- Terminal-Jobモードから抜けてNormalモードになると、'y'などのキーが
+      -- Neovim側のキーマップ(which-keyのyankメニュー等)に奪われてしまう。
+      -- ターミナルバッファに入ったら常にTerminal-Jobモードへ戻すようにする。
+      vim.api.nvim_create_autocmd({ "TermOpen", "BufEnter", "WinEnter" }, {
+        pattern = "term://*",
+        callback = function()
+          if vim.bo.buftype == "terminal" then
+            vim.cmd("startinsert")
+          end
+        end,
+      })
+
 
       -- :q/:wq on last file buffer → :bd instead of quit (triggers BufDelete → dashboard)
       local function is_last_file_buf()
