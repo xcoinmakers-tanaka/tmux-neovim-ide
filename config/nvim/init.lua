@@ -91,6 +91,18 @@ map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
 -- Terminal mode
 map("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
 
+-- Auto re-enter Terminal-insert mode when a terminal window/buffer gets
+-- focus (fixes: clicking a terminal pane with the mouse drops it into
+-- Normal mode, requiring an extra keypress/click before typing works)
+vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter", "FocusGained" }, {
+  pattern = "term://*",
+  callback = function()
+    if vim.bo.buftype == "terminal" then
+      vim.cmd("startinsert")
+    end
+  end,
+})
+
 -- ==========================================================
 -- IDE mode: auto-open file tree + terminals (NVIM_IDE=1)
 -- ==========================================================
